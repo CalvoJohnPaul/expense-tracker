@@ -1,0 +1,40 @@
+{
+	"name": "@expense-tracker/marketing",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "next dev -p 3002",
+		"build": "next build",
+		"start": "serve -s dist -l 3002"
+	},
+	"dependencies": {
+		"@ark-ui/react": "5.30.0",
+		"@hookform/resolvers": "5.2.2",
+		"@tailwindcss/postcss": "4.1.18",
+		"@tailwindcss/typography": "0.5.19",
+		"es-toolkit": "1.44.0",
+		"lucide-react": "0.563.0",
+		"next": "16.1.6",
+		"postcss": "8.5.6",
+		"react": "19.2.4",
+		"react-dom": "19.2.4",
+		"react-hook-form": "7.71.1",
+		"sharp": "0.34.5",
+		"tailwind-merge": "3.4.0",
+		"tailwind-variants": "3.2.2",
+		"tailwind-zag": "1.0.5",
+		"tailwindcss": "4.1.18",
+		"zod": "4.3.6"
+	},
+	"devDependencies": {
+		"@total-typescript/ts-reset": "0.6.1",
+		"@types/node": "25.1.0",
+		"@types/react": "19.2.10",
+		"@types/react-dom": "19.2.3",
+		"babel-plugin-react-compiler": "1.0.0",
+		"serve": "14.2.5",
+		"type-fest": "5.4.3",
+		"typescript": "5.9.3",
+		"velite": "0.3.1"
+	}
+}

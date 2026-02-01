@@ -1,0 +1,30 @@
+'use client';
+
+import type {Assign, HTMLArkProps} from '@ark-ui/react';
+import {ark} from '@ark-ui/react/factory';
+import {forwardRef, useMemo} from 'react';
+import {splitProps} from '~/utils/splitProps';
+import {buttonRecipe, type ButtonRecipeProps} from './Button.recipe';
+
+export interface ButtonProps extends Assign<HTMLArkProps<'button'>, ButtonRecipeProps> {}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+	const [recipeProps, localProps] = useMemo(
+		() => splitProps(props, ...buttonRecipe.variantKeys),
+		[props],
+	);
+
+	return (
+		<ark.button
+			ref={ref}
+			type="button"
+			{...localProps}
+			className={buttonRecipe({
+				...recipeProps,
+				className: localProps.className,
+			})}
+		/>
+	);
+});
+
+Button.displayName = 'Button';

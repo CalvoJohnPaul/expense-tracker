@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/.generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AccountType {
+  ADMIN
+  MEMBER
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum Permission {
+  CREATE_ADMIN_ACCOUNT
+  UPDATE_ADMIN_ACCOUNT
+  DELETE_ADMIN_ACCOUNT
+  SUSPEND_ADMIN_ACCOUNT
+  UNSUSPEND_ADMIN_ACCOUNT
+  CREATE_MEMBER_ACCOUNT
+  UPDATE_MEMBER_ACCOUNT
+  DELETE_MEMBER_ACCOUNT
+  SUSPEND_MEMBER_ACCOUNT
+  UNSUSPEND_MEMBER_ACCOUNT
+}
+
+model Account {
+  id              Int             @id @default(autoincrement())
+  type            AccountType     @default(MEMBER)
+  name            String
+  email           String          @unique
+  avatar          String?
+  status          AccountStatus   @default(ACTIVE)
+  password        String
+  expenses        Expense[]
+  permissions     Permission[]    @default([])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  adminActivities AdminActivity[]
+}
+
+enum ExpenseCategory {
+  HOUSING
+  UTILITIES
+  TRANSPORTATION
+  FOOD
+  INSURANCE
+  HEALTHCARE
+  DEBT_PAYMENT
+  PERSONAL_CARE
+  ENTERTAINMENT
+  SAVINGS
+  EDUCATION
+  CLOTHING
+  MISCELLANEOUS
+  OTHERS
+}
+
+model Expense {
+  id              Int             @id @default(autoincrement())
+  category        ExpenseCategory @default(OTHERS)
+  description     String
+  transactionDate DateTime
+  location        String?
+  amount          Float
+  account         Account         @relation(fields: [accountId], references: [id])
+  accountId       Int
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model UploadedFile {
+  id        Int      @id @default(autoincrement())
+  url       String   @unique
+  type      String
+  size      Float
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  email     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+enum AdminActivityType {
+  LOG_IN
+  CREATE_ADMIN_ACCOUNT
+  UPDATE_ADMIN_ACCOUNT
+  DELETE_ADMIN_ACCOUNT
+  SUSPEND_ADMIN_ACCOUNT
+  UNSUSPEND_ADMIN_ACCOUNT
+  CREATE_MEMBER_ACCOUNT
+  UPDATE_MEMBER_ACCOUNT
+  DELETE_MEMBER_ACCOUNT
+  SUSPEND_MEMBER_ACCOUNT
+  UNSUSPEND_MEMBER_ACCOUNT
+}
+
+model AdminActivity {
+  id        Int               @id @default(autoincrement())
+  type      AdminActivityType
+  account   Account           @relation(fields: [accountId], references: [id])
+  accountId Int
+  details   Json
+  createdAt DateTime          @default(now())
+}

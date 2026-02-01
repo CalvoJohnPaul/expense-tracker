@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+.env
+.env*.local
+.vercel
+.turbo
+*.tsbuildinfo
+next-env.d.ts
+styled-system
+.velite
+.generated

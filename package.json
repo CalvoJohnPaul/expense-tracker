@@ -1,0 +1,23 @@
+{
+	"name": "@expense-tracker/root",
+	"type": "module",
+	"private": true,
+	"packageManager": "pnpm@10.28.2",
+	"scripts": {
+		"api": "pnpm --filter @expense-tracker/api",
+		"admin": "pnpm --filter @expense-tracker/admin",
+		"marketing": "pnpm --filter @expense-tracker/marketing",
+		"defs": "pnpm --filter @expense-tracker/defs",
+		"dev": "turbo run dev",
+		"start": "turbo run start",
+		"build": "turbo run build",
+		"lint": "biome lint",
+		"format": "biome format --write"
+	},
+	"dependencies": {
+		"@biomejs/biome": "2.3.13",
+		"@types/node": "25.1.0",
+		"turbo": "2.8.1",
+		"typescript": "5.9.3"
+	}
+}
