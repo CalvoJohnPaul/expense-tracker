@@ -18,7 +18,7 @@ export const selectRecipe = tv({
 			'ui-invalid:focus-within:outline-red-400',
 			'focus:outline-2',
 			'focus:outline-solid',
-			'focus:outline-emerald-600',
+			'focus:outline-blue-600',
 			'focus:-outline-offset-1',
 			'ui-open:ui-invalid:border-red-400',
 			'ui-open:ui-invalid:outline-red-400',
@@ -94,6 +94,6 @@ export const selectRecipe = tv({
 			'icon:text-neutral-300',
 		],
 		itemText: 'grow',
-		itemIndicator: 'flex size-5 text-emerald-500!',
+		itemIndicator: 'flex size-5 text-blue-500!',
 	}),
 });

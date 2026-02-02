@@ -21,7 +21,7 @@ export const buttonRecipe = tv({
 			lg: 'h-12 px-4.5 text-base',
 		},
 		variant: {
-			solid: 'bg-emerald-600 text-white',
+			solid: 'bg-blue-600 text-white',
 			subtle: 'bg-neutral-800',
 		},
 	},

@@ -29,7 +29,7 @@ function Feature(props: FeatureProps) {
 
 	return (
 		<div className="rounded-md border border-neutral-700 bg-neutral-700/10 p-8">
-			<div className="w-fit rounded-full bg-emerald-800/25 p-3 text-emerald-50">{icon}</div>
+			<div className="w-fit rounded-full bg-blue-800/25 p-3 text-blue-50">{icon}</div>
 			<h3 className="mt-4 font-heading font-semibold text-xl">{name}</h3>
 			<p className="mt-1 text-neutral-300 text-sm">{description}</p>
 		</div>

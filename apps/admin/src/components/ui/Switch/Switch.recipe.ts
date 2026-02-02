@@ -21,9 +21,9 @@ export const switchRecipe = tv({
 			'ui-focus:outline-solid',
 			'ui-focus:outline-offset-2',
 			'ui-focus:outline-white/50',
-			'ui-checked:border-emerald-600',
-			'ui-checked:bg-emerald-600',
-			'ui-checked:ui-focus:outline-emerald-800',
+			'ui-checked:border-blue-600',
+			'ui-checked:bg-blue-600',
+			'ui-checked:ui-focus:outline-blue-800',
 		],
 		thumb:
 			'size-5 ui-checked:translate-x-full rounded-full bg-white transition-transform duration-200',

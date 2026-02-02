@@ -17,7 +17,7 @@ export const numberInputRecipe = tv({
 			'ui-invalid:focus-within:outline-red-400',
 			'focus-within:outline-2',
 			'focus-within:outline-solid',
-			'focus-within:outline-emerald-600',
+			'focus-within:outline-blue-600',
 			'focus-within:-outline-offset-1',
 		],
 		input: 'row-span-2 w-full bg-transparent px-4 outline-none',

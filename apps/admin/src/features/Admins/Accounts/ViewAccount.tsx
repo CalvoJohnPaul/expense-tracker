@@ -21,7 +21,7 @@ export function ViewAccount() {
 				disclosure.setOpen(details.open);
 			}}
 		>
-			<Dialog.Trigger className="icon:size-4 text-neutral-500 hover:text-emerald-400">
+			<Dialog.Trigger className="icon:size-4 text-neutral-500 hover:text-blue-400">
 				<SquareArrowOutUpRightIcon />
 			</Dialog.Trigger>
 			<Portal>

@@ -184,7 +184,7 @@ export function FiltersTrigger() {
 			<Tooltip.Trigger asChild>
 				<IconButton
 					onClick={() => filters.setOpen((v) => !v)}
-					className="ui-open:outline-2 ui-open:outline-emerald-600 ui-open:outline-solid ui-open:-outline-offset-1"
+					className="ui-open:outline-2 ui-open:outline-blue-600 ui-open:outline-solid ui-open:-outline-offset-1"
 					data-state={filters.open ? 'open' : 'closed'}
 				>
 					<Settings2Icon />

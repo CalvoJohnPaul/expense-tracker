@@ -19,7 +19,7 @@ export async function HowItWorks() {
 						</Tabs.Trigger>
 					))}
 
-					<Tabs.Indicator className="-ml-px h-(--height) w-0.5 bg-emerald-700" />
+					<Tabs.Indicator className="-ml-px h-(--height) w-0.5 bg-blue-700" />
 				</Tabs.List>
 
 				{instructions.map((item) => (

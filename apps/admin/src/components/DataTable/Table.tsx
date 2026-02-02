@@ -82,7 +82,7 @@ export function Table() {
 												'transition-all',
 												'duration-300',
 												'hover:text-neutral-400',
-												sortColumn === col.id ? 'text-emerald-400 hover:text-emerald-400' : '',
+												sortColumn === col.id ? 'text-blue-400 hover:text-blue-400' : '',
 												sortColumn === col.id && sortOrder === 'ASC' ? 'rotate-180' : '',
 												sortColumn === col.id && sortOrder === 'DESC' ? 'rotate-0' : '',
 											)}

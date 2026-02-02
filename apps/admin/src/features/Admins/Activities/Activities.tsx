@@ -35,7 +35,7 @@ export function Activities() {
 								<div className="grow" />
 								<button
 									type="button"
-									className="icon:size-4 text-neutral-500 hover:text-emerald-400"
+									className="icon:size-4 text-neutral-500 hover:text-blue-400"
 									onClick={() => {
 										context.setTab('accounts');
 										context.setActivityState(null);

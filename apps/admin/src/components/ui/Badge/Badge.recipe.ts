@@ -9,8 +9,8 @@ export const badgeRecipe = tv({
 	variants: {
 		accent: {
 			primary: {
-				root: 'border-emerald-900 bg-emerald-900/25',
-				label: 'text-emerald-300',
+				root: 'border-blue-900 bg-blue-900/25',
+				label: 'text-blue-300',
 			},
 			danger: {
 				root: 'border-red-900 bg-red-900/25',

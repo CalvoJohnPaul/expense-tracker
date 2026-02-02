@@ -32,8 +32,8 @@ export const featuredIconRecipe = tv({
 		},
 		accent: {
 			primary: {
-				root: 'before:bg-emerald-600 after:bg-emerald-600/25',
-				icon: 'text-emerald-50',
+				root: 'before:bg-blue-600 after:bg-blue-600/25',
+				icon: 'text-blue-50',
 			},
 			danger: {
 				root: 'before:bg-rose-600 after:bg-rose-600/25',

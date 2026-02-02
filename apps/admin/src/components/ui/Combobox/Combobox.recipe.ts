@@ -14,7 +14,7 @@ export const comboboxRecipe = tv({
 			'ui-invalid:focus-within:outline-red-400',
 			'focus-within:outline-2',
 			'focus-within:outline-solid',
-			'focus-within:outline-emerald-600',
+			'focus-within:outline-blue-600',
 			'focus-within:-outline-offset-1',
 		],
 		input: 'h-11 grow pl-4 outline-none',
@@ -105,6 +105,6 @@ export const comboboxRecipe = tv({
 			'icon:text-neutral-300',
 		],
 		itemText: 'grow',
-		itemIndicator: 'flex size-5 text-emerald-500!',
+		itemIndicator: 'flex size-5 text-blue-500!',
 	}),
 });

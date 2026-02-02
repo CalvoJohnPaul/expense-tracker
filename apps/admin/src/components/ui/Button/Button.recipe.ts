@@ -33,7 +33,7 @@ export const buttonRecipe = tv({
 		{
 			variant: 'solid',
 			accent: 'primary',
-			className: 'bg-emerald-600 text-white',
+			className: 'bg-blue-600 text-white',
 		},
 		{
 			variant: 'solid',

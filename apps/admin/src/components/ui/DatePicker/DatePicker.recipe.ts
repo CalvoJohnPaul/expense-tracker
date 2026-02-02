@@ -16,7 +16,7 @@ export const datePickerRecipe = tv({
 			'ui-invalid:focus-within:outline-red-400',
 			'focus:outline-2',
 			'focus:outline-solid',
-			'focus:outline-emerald-600',
+			'focus:outline-blue-600',
 			'focus:-outline-offset-1',
 		],
 		trigger: [
@@ -95,7 +95,7 @@ export const datePickerRecipe = tv({
 			'hover:ui-not-disabled:text-neutral-100',
 
 			'ui-selected:ui-not-disabled:font-medium',
-			'ui-selected:ui-not-disabled:bg-emerald-600',
+			'ui-selected:ui-not-disabled:bg-blue-600',
 			'ui-selected:ui-not-disabled:text-white',
 
 			'ui-today:after:absolute',
@@ -104,18 +104,18 @@ export const datePickerRecipe = tv({
 			'ui-today:after:size-1',
 			'ui-today:after:-translate-x-1/2',
 			'ui-today:after:rounded-full',
-			'ui-today:after:bg-emerald-800',
+			'ui-today:after:bg-blue-800',
 
 			'ui-in-range:ui-not-disabled:font-medium',
-			'ui-in-range:ui-not-disabled:bg-emerald-600/25',
-			'ui-in-range:ui-not-disabled:text-emerald-100',
+			'ui-in-range:ui-not-disabled:bg-blue-600/25',
+			'ui-in-range:ui-not-disabled:text-blue-100',
 
 			'ui-range-start:ui-not-disabled:font-medium',
-			'ui-range-start:ui-not-disabled:bg-emerald-600',
+			'ui-range-start:ui-not-disabled:bg-blue-600',
 			'ui-range-start:ui-not-disabled:text-white',
 
 			'ui-range-end:ui-not-disabled:font-medium',
-			'ui-range-end:ui-not-disabled:bg-emerald-600',
+			'ui-range-end:ui-not-disabled:bg-blue-600',
 			'ui-range-end:ui-not-disabled:text-white',
 		],
 		tableHeader: 'py-3 font-medium text-neutral-300 text-sm',

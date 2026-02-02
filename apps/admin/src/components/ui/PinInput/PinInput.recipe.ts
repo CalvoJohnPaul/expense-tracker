@@ -16,7 +16,7 @@ export const pinInputRecipe = tv({
 			'bg-neutral-900',
 			'focus:outline-2',
 			'focus:outline-solid',
-			'focus:outline-emerald-600',
+			'focus:outline-blue-600',
 			'focus:-outline-offset-1',
 			'ui-invalid:border-red-400',
 			'ui-invalid:focus:outline-red-400',

@@ -109,4 +109,4 @@ export function Sidebar() {
 	);
 }
 
-const itemStyle = tw`flex aspect-square w-full items-center justify-center rounded-md text-neutral-200 ui-active:bg-emerald-900/25 ui-active:text-emerald-300 icon:size-6 disabled:opacity-50`;
+const itemStyle = tw`flex aspect-square w-full items-center justify-center rounded-md text-neutral-200 ui-active:bg-blue-900/25 ui-active:text-blue-300 icon:size-6 disabled:opacity-50`;

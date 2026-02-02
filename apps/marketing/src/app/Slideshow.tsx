@@ -20,7 +20,7 @@ export function Slideshow() {
 					))}
 				</Carousel.ItemGroup>
 
-				<Carousel.Control className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-emerald-600/75 px-1.5 py-1">
+				<Carousel.Control className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full bg-blue-600/75 px-1.5 py-1">
 					<Carousel.PrevTrigger className="disabled:opacity-50">
 						<ChevronLeftIcon className="size-5 text-white" />
 					</Carousel.PrevTrigger>
@@ -29,7 +29,7 @@ export function Slideshow() {
 							<Carousel.Indicator
 								key={image}
 								index={index}
-								className="size-2.5 rounded-full bg-emerald-700/90 ui-current:bg-white"
+								className="size-2.5 rounded-full bg-blue-700/90 ui-current:bg-white"
 							/>
 						))}
 					</Carousel.IndicatorGroup>

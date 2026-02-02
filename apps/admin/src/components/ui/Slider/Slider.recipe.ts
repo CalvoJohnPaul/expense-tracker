@@ -7,7 +7,7 @@ export const sliderRecipe = tv({
 		root: 'flex items-center gap-2',
 		control: 'relative flex h-2 w-full grow items-center',
 		track: 'h-full grow overflow-hidden rounded-full bg-neutral-800',
-		range: 'h-full bg-emerald-600',
+		range: 'h-full bg-blue-600',
 		thumb: [
 			'z-1',
 			'size-5.5',
