@@ -1,6 +1,6 @@
-import {useUrl} from 'crossroad';
 import {delay} from 'es-toolkit';
 import {CoinsIcon, LogOutIcon, TrendingUpIcon, UserIcon, UserLockIcon} from 'lucide-react';
+import {NavLink, useNavigate} from 'react-router';
 import {Tooltip} from '~/components/ui/Tooltip';
 import {queryClient} from '~/config/queryClient';
 import {useCurrentAccountQuery} from '~/hooks/useCurrentAccountQuery';
@@ -9,8 +9,7 @@ import {tw} from '~/utils/tw';
 import {LogoIcon} from '../../components/icons/LogoIcon';
 
 export function Sidebar() {
-	const [url, setUrl] = useUrl();
-
+	const navigate = useNavigate();
 	const accountQuery = useCurrentAccountQuery();
 	const destroySessionMutation = useDestroySessionMutation();
 
@@ -53,13 +52,9 @@ export function Sidebar() {
 							<li key={item.path} className="block">
 								<Tooltip.Root positioning={{placement: 'right'}}>
 									<Tooltip.Trigger asChild>
-										<a
-											href={item.path}
-											className={itemStyle}
-											data-active={item.path === url.path || undefined}
-										>
+										<NavLink to={item.path} className={itemStyle}>
 											{item.icon}
-										</a>
+										</NavLink>
 									</Tooltip.Trigger>
 									<Tooltip.Positioner>
 										<Tooltip.Content>
@@ -82,7 +77,7 @@ export function Sidebar() {
 									await destroySessionMutation.mutateAsync();
 									queryClient.setQueryData(useCurrentAccountQuery.getQueryKey(), null);
 									await delay(1);
-									setUrl('/');
+									await navigate('/');
 									queryClient.invalidateQueries({
 										queryKey: [],
 										exact: false,
@@ -109,4 +104,4 @@ export function Sidebar() {
 	);
 }
 
-const itemStyle = tw`flex aspect-square w-full items-center justify-center rounded-md text-neutral-200 ui-active:bg-blue-900/25 ui-active:text-blue-300 icon:size-6 disabled:opacity-50`;
+const itemStyle = tw`flex aspect-square w-full items-center justify-center rounded-md text-neutral-200 aria-page:bg-blue-900/25 aria-page:text-blue-300 icon:size-6 disabled:opacity-50`;

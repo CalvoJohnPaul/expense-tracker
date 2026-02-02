@@ -585,7 +585,10 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 			const [data] = await app.prisma.$transaction([
 				app.prisma.account.update({
 					where: {id: req.params.id},
-					data: req.body,
+					data: {
+						...req.body,
+						password: req.body.password ? await hash(req.body.password, 8) : undefined,
+					},
 					select: {
 						id: true,
 						type: true,

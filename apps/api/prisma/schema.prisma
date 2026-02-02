@@ -69,7 +69,7 @@ model Expense {
   transactionDate DateTime
   location        String?
   amount          Float
-  account         Account         @relation(fields: [accountId], references: [id])
+  account         Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId       Int
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
@@ -109,7 +109,7 @@ enum AdminActivityType {
 model AdminActivity {
   id        Int               @id @default(autoincrement())
   type      AdminActivityType
-  account   Account           @relation(fields: [accountId], references: [id])
+  account   Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId Int
   details   Json
   createdAt DateTime          @default(now())

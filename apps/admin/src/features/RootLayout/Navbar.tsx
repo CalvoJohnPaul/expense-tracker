@@ -1,6 +1,6 @@
-import {useUrl} from 'crossroad';
 import {delay} from 'es-toolkit';
 import {LogOutIcon} from 'lucide-react';
+import {useNavigate} from 'react-router';
 import {Avatar} from '~/components/ui/Avatar';
 import {Menu} from '~/components/ui/Menu';
 import {queryClient} from '~/config/queryClient';
@@ -10,7 +10,7 @@ import {ChangePassword} from './ChangePassword';
 import {EditProfile} from './EditProfile';
 
 export function Navbar() {
-	const [, setUrl] = useUrl();
+	const navigate = useNavigate();
 
 	const accountQuery = useCurrentAccountQuery();
 	const destroySessionMutation = useDestroySessionMutation();
@@ -42,7 +42,7 @@ export function Navbar() {
 									await destroySessionMutation.mutateAsync();
 									queryClient.setQueryData(useCurrentAccountQuery.getQueryKey(), null);
 									await delay(1);
-									setUrl('/');
+									await navigate('/');
 									queryClient.invalidateQueries({
 										queryKey: [],
 										exact: false,

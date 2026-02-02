@@ -1,12 +1,12 @@
 import {Toaster} from '@ark-ui/react';
 import {QueryClientProvider} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
-import Router, {Route, Switch} from 'crossroad';
 import {FrownIcon, InfoIcon, PartyPopperIcon, XIcon} from 'lucide-react';
 import {debounce} from 'nuqs';
 import {NuqsAdapter} from 'nuqs/adapters/react';
+import {BrowserRouter, Link, Route, Routes} from 'react-router';
 import './app.css';
-import {Protected} from './components/Protected';
+import {Button} from './components/ui/Button';
 import {FeaturedIcon} from './components/ui/FeaturedIcon';
 import {Toast} from './components/ui/Toast';
 import {queryClient} from './config/queryClient';
@@ -14,8 +14,9 @@ import {toaster} from './config/toaster';
 import {Admins} from './features/Admins';
 import {Dashboard} from './features/Dashboard';
 import {Expenses} from './features/Expenses';
-import {MemberAccounts} from './features/Members/Members';
+import {Members} from './features/Members/Members';
 import {RootLayout} from './features/RootLayout';
+import {useCurrentAccountQuery} from './hooks/useCurrentAccountQuery';
 
 export function App() {
 	return (
@@ -28,21 +29,16 @@ export function App() {
 				}}
 			>
 				<QueryClientProvider client={queryClient}>
-					<Router>
-						<Switch>
-							<RootLayout>
-								<Protected type="MEMBER">
-									<Route path="/" component={Dashboard} />
-									<Route path="/expenses" component={Expenses} />
-								</Protected>
-
-								<Protected type="ADMIN">
-									<Route path="/" component={MemberAccounts} />
-									<Route path="/admins" component={Admins} />
-								</Protected>
-							</RootLayout>
-						</Switch>
-					</Router>
+					<BrowserRouter>
+						<RootLayout>
+							<Routes>
+								<Route path="/" element={<Index />} />
+								<Route path="/expenses" element={<Expenses />} />
+								<Route path="/admins" element={<Admins />} />
+								<Route path="*" element={<_404 />} />
+							</Routes>
+						</RootLayout>
+					</BrowserRouter>
 					<ReactQueryDevtools />
 				</QueryClientProvider>
 			</NuqsAdapter>
@@ -93,5 +89,31 @@ export function App() {
 				)}
 			</Toaster>
 		</>
+	);
+}
+
+function Index() {
+	const query = useCurrentAccountQuery();
+	if (query.data == null) return null;
+	if (query.data.type === 'ADMIN') return <Members />;
+	return <Dashboard />;
+}
+
+function _404() {
+	return (
+		<div className="flex flex-col items-center py-32">
+			<FeaturedIcon.Root accent="danger">
+				<FeaturedIcon.Icon>
+					<FrownIcon />
+				</FeaturedIcon.Icon>
+			</FeaturedIcon.Root>
+			<h1 className="mt-5 font-bold text-2xl">Page not found</h1>
+			<p className="text-neutral-300">
+				The page you’re trying to access doesn’t exist or may have been removed.
+			</p>
+			<Button type="button" variant="outline" className="mt-5" asChild>
+				<Link to="/">Get me out</Link>
+			</Button>
+		</div>
 	);
 }
