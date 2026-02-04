@@ -1,20 +1,257 @@
+import {createListCollection} from '@ark-ui/react';
+import {format} from 'date-fns';
+import {TrendingDownIcon, TrendingUpIcon} from 'lucide-react';
+import {Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
+import {DataTable} from '~/components/DataTable';
 import {protected_} from '~/components/Protected';
+import {Badge} from '~/components/ui/Badge';
+import {Stat} from '~/components/ui/Stat';
+import {useExpensesQuery} from '~/hooks/useExpensesQuery';
+import {tw} from '~/utils/tw';
 
 export const Dashboard = protected_(
 	() => {
 		return (
-			<div>
-				<div className="mb-8 flex items-center gap-3">
-					<div>
-						<h1 className="font-bold text-3xl">Dashboard</h1>
-						<p className="text-neutral-300">Keep an eye on your spending and financial activity.</p>
-					</div>
-					<div className="grow" />
+			<>
+				<div className="mb-8">
+					<h1 className="font-bold text-3xl">Dashboard</h1>
+					<p className="text-neutral-300">Overview of your spending activity</p>
 				</div>
-			</div>
+
+				<div className="space-y-6">
+					<Status />
+					<TotalExpensePerCategory />
+					<RecentExpenses />
+				</div>
+			</>
 		);
 	},
 	{
 		type: 'MEMBER',
 	},
 );
+
+function Status() {
+	return (
+		<div className="space-y-5">
+			<div className="grid grid-cols-4 gap-4">
+				<div className="rounded-xl border p-4">
+					<Stat.Root>
+						<Stat.Label>Total Expenses</Stat.Label>
+						<Stat.ValueText>{numberFormatter.format(35720)}</Stat.ValueText>
+					</Stat.Root>
+				</div>
+				<div className="rounded-xl border p-4">
+					<Stat.Root>
+						<Stat.Label>Average Daily Spend</Stat.Label>
+						<Stat.ValueText>{numberFormatter.format(1180)}</Stat.ValueText>
+					</Stat.Root>
+				</div>
+				<div className="rounded-xl border p-4">
+					<Stat.Root>
+						<Stat.Label>This Month vs Last Month</Stat.Label>
+						<Stat.ValueText className="">{numberFormatter.format(1000)}</Stat.ValueText>
+						<Stat.DownIndicator>
+							<TrendingDownIcon /> 5% from previous
+						</Stat.DownIndicator>
+					</Stat.Root>
+				</div>
+				<div className="rounded-xl border p-4">
+					<Stat.Root>
+						<Stat.Label>This Year vs Last Year</Stat.Label>
+						<Stat.ValueText>{numberFormatter.format(5000)}</Stat.ValueText>
+						<Stat.UpIndicator>
+							<TrendingUpIcon /> 5% from previous
+						</Stat.UpIndicator>
+					</Stat.Root>
+				</div>
+			</div>
+
+			<div className="rounded-xl border p-4">
+				<Stat.Root>
+					<Stat.Label>Total Expense</Stat.Label>
+					<Stat.ValueText>{numberFormatter.format(12500)}</Stat.ValueText>
+					<Stat.HelpText>
+						<span>Monthly Rent</span>
+						<span className="text-neutral-700">•</span>
+						<span>HOUSING</span>
+						<span className="text-neutral-700">•</span>
+						<span>{format(new Date(), 'yyyy MMM dd')}</span>
+					</Stat.HelpText>
+				</Stat.Root>
+			</div>
+		</div>
+	);
+}
+
+function RecentExpenses() {
+	const query = useExpensesQuery({
+		pageSize: 10,
+		sort: {
+			column: 'CREATED_AT',
+			order: 'DESC',
+		},
+	});
+
+	return (
+		<div>
+			<div className="mb-4">
+				<h2 className="font-medium text-sm">Recent Expenses</h2>
+				<p className="text-neutral-300 text-xs">Your latest recorded transactions</p>
+			</div>
+
+			<DataTable
+				id="recent-expenses"
+				collection={createListCollection({
+					items: query.data?.rows ?? [],
+					itemToString: (item) => `${item.category} ${item.amount}`,
+					itemToValue: (item) => item.id.toString(),
+				})}
+				columns={[
+					{
+						id: 'category',
+						heading: 'Category',
+						cell(data) {
+							return (
+								<Badge.Root
+									accent={
+										data.category === 'CLOTHING' || data.category === 'ENTERTAINMENT'
+											? 'danger'
+											: data.category === 'DEBT_PAYMENT' ||
+													data.category === 'EDUCATION' ||
+													data.category === 'HOUSING' ||
+													data.category === 'HEALTHCARE' ||
+													data.category === 'SAVINGS' ||
+													data.category === 'INSURANCE'
+												? 'primary'
+												: data.category === 'PERSONAL_CARE' ||
+														data.category === 'TRANSPORTATION' ||
+														data.category === 'FOOD'
+													? 'warning'
+													: 'info'
+									}
+								>
+									<Badge.Label>{data.category.replace(/_/g, ' ')}</Badge.Label>
+								</Badge.Root>
+							);
+						},
+
+						className: {
+							cell: tw`w-64`,
+						},
+					},
+					{
+						id: 'transactionDate',
+						heading: 'Transaction date',
+						cell(data) {
+							return format(data.transactionDate, 'dd MMM yyyy');
+						},
+					},
+					{
+						id: 'location',
+						heading: 'Location',
+						cell(data) {
+							return (
+								<span title={data.location ?? ''} className="max-w-96 truncate">
+									{data.location}
+								</span>
+							);
+						},
+					},
+					{
+						id: 'amount',
+						heading: 'Amount',
+						cell(data) {
+							return new Intl.NumberFormat('en-US', {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							}).format(data.amount);
+						},
+						numeric: true,
+						className: {
+							cell: tw`w-48`,
+						},
+					},
+					{
+						id: 'createdAt',
+						heading: 'Created date & time',
+						cell(data) {
+							return format(data.createdAt, 'dd MMM yyyy hh:mm a');
+						},
+						className: {
+							cell: tw`w-56 tabular-nums`,
+						},
+					},
+				]}
+			/>
+		</div>
+	);
+}
+
+function TotalExpensePerCategory() {
+	return (
+		<div>
+			<div className="mb-4">
+				<h2 className="font-medium text-sm">Expenses by Category</h2>
+				<p className="text-neutral-300 text-xs">Breakdown of your expenses by category</p>
+			</div>
+
+			<div className="rounded-xl border p-4 pt-6">
+				<div className="h-80">
+					<ResponsiveContainer width="100%" height="100%">
+						<BarChart
+							data={[
+								{category: 'HOUSING', total: 12000},
+								{category: 'FOOD', total: 8200},
+								{category: 'TRANSPORTATION', total: 4600},
+								{category: 'ENTERTAINMENT', total: 3100},
+								{category: 'UTILITIES', total: 2800},
+								{category: 'SAVINGS', total: 5000},
+							]}
+						>
+							<XAxis
+								dataKey="category"
+								fontSize={12}
+								tick={{
+									fill: 'var(--color-neutral-500)',
+								}}
+								tickLine={false}
+								axisLine={false}
+							/>
+							<YAxis
+								fontSize={12}
+								tick={{
+									fill: 'var(--color-neutral-500)',
+								}}
+								tickLine={false}
+								axisLine={false}
+							/>
+							<Tooltip
+								formatter={(value) => value?.toLocaleString('en-US')}
+								contentStyle={{
+									color: 'var(--color-neutral-400)',
+									background: 'var(--color-neutral-800)',
+									borderColor: 'var(--color-neutral-700)',
+									borderRadius: 'var(--radius-sm)',
+									padding: '0.75rem 1rem',
+									fontSize: '0.75rem',
+								}}
+								itemStyle={{
+									color: 'var(--color-neutral-200)',
+									fontSize: '1rem',
+								}}
+								cursor={false}
+							/>
+							<Bar dataKey="total" fill="var(--color-emerald-800)" />
+						</BarChart>
+					</ResponsiveContainer>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+const numberFormatter = new Intl.NumberFormat('en-US', {
+	maximumFractionDigits: 2,
+	minimumFractionDigits: 1,
+});
