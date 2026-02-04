@@ -1,5 +1,6 @@
 export * from './Account.js';
 export * from './AdminActivity.js';
+export * from './ChartData.js';
 export * from './common.js';
 export * from './Csrf.js';
 export * from './Expense.js';

@@ -1,11 +1,14 @@
 import {createListCollection} from '@ark-ui/react';
+import type {ExpenseCategory} from '@expense-tracker/defs';
 import {format} from 'date-fns';
+import {map} from 'es-toolkit/compat';
 import {TrendingDownIcon, TrendingUpIcon} from 'lucide-react';
-import {Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
+import {Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import {DataTable} from '~/components/DataTable';
 import {protected_} from '~/components/Protected';
 import {Badge} from '~/components/ui/Badge';
 import {Stat} from '~/components/ui/Stat';
+import {useChartQuery} from '~/hooks/useChartQuery';
 import {useExpensesQuery} from '~/hooks/useExpensesQuery';
 import {tw} from '~/utils/tw';
 
@@ -20,7 +23,7 @@ export const Dashboard = protected_(
 
 				<div className="space-y-6">
 					<Status />
-					<TotalExpensePerCategory />
+					<TotalExpensesPerCategory />
 					<RecentExpenses />
 				</div>
 			</>
@@ -32,52 +35,46 @@ export const Dashboard = protected_(
 );
 
 function Status() {
-	return (
-		<div className="space-y-5">
-			<div className="grid grid-cols-4 gap-4">
-				<div className="rounded-xl border p-4">
-					<Stat.Root>
-						<Stat.Label>Total Expenses</Stat.Label>
-						<Stat.ValueText>{numberFormatter.format(35720)}</Stat.ValueText>
-					</Stat.Root>
-				</div>
-				<div className="rounded-xl border p-4">
-					<Stat.Root>
-						<Stat.Label>Average Daily Spend</Stat.Label>
-						<Stat.ValueText>{numberFormatter.format(1180)}</Stat.ValueText>
-					</Stat.Root>
-				</div>
-				<div className="rounded-xl border p-4">
-					<Stat.Root>
-						<Stat.Label>This Month vs Last Month</Stat.Label>
-						<Stat.ValueText className="">{numberFormatter.format(1000)}</Stat.ValueText>
-						<Stat.DownIndicator>
-							<TrendingDownIcon /> 5% from previous
-						</Stat.DownIndicator>
-					</Stat.Root>
-				</div>
-				<div className="rounded-xl border p-4">
-					<Stat.Root>
-						<Stat.Label>This Year vs Last Year</Stat.Label>
-						<Stat.ValueText>{numberFormatter.format(5000)}</Stat.ValueText>
-						<Stat.UpIndicator>
-							<TrendingUpIcon /> 5% from previous
-						</Stat.UpIndicator>
-					</Stat.Root>
-				</div>
-			</div>
+	const query = useChartQuery();
 
+	return (
+		<div className="grid grid-cols-4 gap-4">
 			<div className="rounded-xl border p-4">
 				<Stat.Root>
-					<Stat.Label>Total Expense</Stat.Label>
-					<Stat.ValueText>{numberFormatter.format(12500)}</Stat.ValueText>
-					<Stat.HelpText>
-						<span>Monthly Rent</span>
-						<span className="text-neutral-700">•</span>
-						<span>HOUSING</span>
-						<span className="text-neutral-700">•</span>
-						<span>{format(new Date(), 'yyyy MMM dd')}</span>
-					</Stat.HelpText>
+					<Stat.Label>Total Expenses</Stat.Label>
+					<Stat.ValueText>{numberFormatter.format(query.data?.totalExpenses ?? 0)}</Stat.ValueText>
+				</Stat.Root>
+			</div>
+			<div className="rounded-xl border p-4">
+				<Stat.Root>
+					<Stat.Label>Average Daily Spend</Stat.Label>
+					<Stat.ValueText>
+						{numberFormatter.format(query.data?.averageDailySpend ?? 0)}
+					</Stat.ValueText>
+				</Stat.Root>
+			</div>
+			<div className="rounded-xl border p-4">
+				<Stat.Root>
+					<Stat.Label>This Month vs Last Month</Stat.Label>
+					<Stat.ValueText className="">
+						{numberFormatter.format(query.data?.totalExpensesThisMonth ?? 0)}
+					</Stat.ValueText>
+					<Stat.DownIndicator>
+						<TrendingDownIcon />{' '}
+						{numberFormatter.format(query.data?.monthOverMonthPercentChange ?? 0)}% from previous
+					</Stat.DownIndicator>
+				</Stat.Root>
+			</div>
+			<div className="rounded-xl border p-4">
+				<Stat.Root>
+					<Stat.Label>This Year vs Last Year</Stat.Label>
+					<Stat.ValueText>
+						{numberFormatter.format(query.data?.totalExpensesThisYear ?? 0)}
+					</Stat.ValueText>
+					<Stat.UpIndicator>
+						<TrendingUpIcon /> {numberFormatter.format(query.data?.yearOverYearPercentChange ?? 0)}%
+						from previous
+					</Stat.UpIndicator>
 				</Stat.Root>
 			</div>
 		</div>
@@ -188,7 +185,33 @@ function RecentExpenses() {
 	);
 }
 
-function TotalExpensePerCategory() {
+function TotalExpensesPerCategory() {
+	const query = useChartQuery();
+
+	const data = query.data
+		? map(query.data.totalExpensesPerCategory, (v, k) => ({
+				category: k.replace(/_/g, ' '),
+				total: v ?? 0,
+			}))
+		: [];
+
+	const CATEGORY_COLORS: Record<string, string> = {
+		DEBT_PAYMENT: 'var(--color-emerald-700)',
+		EDUCATION: 'var(--color-emerald-700)',
+		HOUSING: 'var(--color-emerald-700)',
+		HEALTHCARE: 'var(--color-emerald-700)',
+		SAVINGS: 'var(--color-emerald-700)',
+		INSURANCE: 'var(--color-emerald-700)',
+		CLOTHING: 'var(--color-rose-700)',
+		ENTERTAINMENT: 'var(--color-rose-700)',
+		PERSONAL_CARE: 'var(--color-amber-700)',
+		TRANSPORTATION: 'var(--color-amber-700)',
+		FOOD: 'var(--color-amber-700)',
+		MISCELLANEOUS: 'var(--color-blue-700)',
+		UTILITIES: 'var(--color-blue-700)',
+		OTHERS: 'var(--color-blue-700)',
+	} satisfies Record<ExpenseCategory, string>;
+
 	return (
 		<div>
 			<div className="mb-4">
@@ -199,22 +222,11 @@ function TotalExpensePerCategory() {
 			<div className="rounded-xl border p-4 pt-6">
 				<div className="h-80">
 					<ResponsiveContainer width="100%" height="100%">
-						<BarChart
-							data={[
-								{category: 'HOUSING', total: 12000},
-								{category: 'FOOD', total: 8200},
-								{category: 'TRANSPORTATION', total: 4600},
-								{category: 'ENTERTAINMENT', total: 3100},
-								{category: 'UTILITIES', total: 2800},
-								{category: 'SAVINGS', total: 5000},
-							]}
-						>
+						<BarChart data={data}>
 							<XAxis
 								dataKey="category"
 								fontSize={12}
-								tick={{
-									fill: 'var(--color-neutral-500)',
-								}}
+								tick={false}
 								tickLine={false}
 								axisLine={false}
 							/>
@@ -242,7 +254,20 @@ function TotalExpensePerCategory() {
 								}}
 								cursor={false}
 							/>
-							<Bar dataKey="total" fill="var(--color-emerald-800)" />
+							<Bar
+								dataKey="total"
+								background={{
+									fill: 'var(--color-neutral-800)',
+									fillOpacity: 0.35,
+								}}
+							>
+								{data.map((entry) => (
+									<Cell
+										key={entry.category}
+										fill={CATEGORY_COLORS[entry.category.replace(/\s/g, '_')]}
+									/>
+								))}
+							</Bar>
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
