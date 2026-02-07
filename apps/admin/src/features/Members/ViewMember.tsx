@@ -1,6 +1,7 @@
 import {Portal} from '@ark-ui/react';
 import {noop} from 'es-toolkit';
 import {SquareArrowOutUpRightIcon, UserIcon} from 'lucide-react';
+import {AvatarField} from '~/components/forms/AvatarField';
 import {TextField} from '~/components/forms/TextField';
 import {Button} from '~/components/ui/Button';
 import {Dialog} from '~/components/ui/Dialog';
@@ -40,6 +41,10 @@ export function ViewMember() {
 							<Dialog.CloseTrigger />
 						</Dialog.Header>
 						<Dialog.Body className="space-y-3">
+							<Field.Root>
+								<Field.Label>Avatar</Field.Label>
+								<AvatarField value={member.avatar} onChange={noop} readOnly />
+							</Field.Root>
 							<Field.Root>
 								<Field.Label>Name</Field.Label>
 								<TextField value={member.name} onChange={noop} readOnly placeholder="Enter name" />

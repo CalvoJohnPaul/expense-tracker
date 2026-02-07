@@ -77,7 +77,7 @@ model Expense {
 
 model UploadedFile {
   id        Int      @id @default(autoincrement())
-  url       String   @unique
+  src       String   @unique
   type      String
   size      Float
   name      String

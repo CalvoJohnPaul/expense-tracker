@@ -70,6 +70,9 @@ async function main() {
 
 		await server.register(helmet, {
 			global: true,
+			crossOriginResourcePolicy: {
+				policy: 'cross-origin',
+			},
 		});
 
 		await server.register(multipart, {
@@ -117,7 +120,7 @@ async function main() {
 			root: path.join(__dirname, 'uploads'),
 			index: false,
 			prefix: '/uploads',
-			maxAge: '30d',
+			maxAge: '90d',
 		});
 
 		await server.listen({

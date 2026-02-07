@@ -1,6 +1,7 @@
 import {Portal} from '@ark-ui/react';
 import {noop} from 'es-toolkit';
 import {SquareArrowOutUpRightIcon, UserIcon} from 'lucide-react';
+import {AvatarField} from '~/components/forms/AvatarField';
 import {TextField} from '~/components/forms/TextField';
 import {Button} from '~/components/ui/Button';
 import {Dialog} from '~/components/ui/Dialog';
@@ -41,6 +42,10 @@ export function ViewAccount() {
 							<Dialog.CloseTrigger />
 						</Dialog.Header>
 						<Dialog.Body className="space-y-3">
+							<Field.Root readOnly>
+								<Field.Label>Avatar</Field.Label>
+								<AvatarField value={account.avatar} onChange={noop} />
+							</Field.Root>
 							<Field.Root readOnly>
 								<Field.Label>Name</Field.Label>
 								<TextField value={account.name} onChange={noop} placeholder="Enter name" />

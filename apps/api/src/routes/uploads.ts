@@ -36,19 +36,27 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 
 			const uniqName = `${randomUUID()}${extname(file.filename)}`;
 
-			await pipeline(file.file, createWriteStream(join(process.cwd(), 'uploads', uniqName)));
+			await pipeline(file.file, createWriteStream(join(process.cwd(), 'src/uploads', uniqName)));
 
 			const name = file.filename;
 			const type = file.mimetype;
 			const size = file.file.bytesRead;
-			const url = `/uploads/${uniqName}`;
+			const src = `/uploads/${uniqName}`;
 
 			const data = await app.prisma.uploadedFile.create({
 				data: {
-					url,
+					src,
 					name,
 					size,
 					type,
+				},
+				select: {
+					id: true,
+					src: true,
+					name: true,
+					size: true,
+					type: true,
+					createdAt: true,
 				},
 			});
 

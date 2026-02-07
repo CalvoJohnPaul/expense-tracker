@@ -4,6 +4,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {invariant} from 'es-toolkit';
 import {UserPenIcon} from 'lucide-react';
 import {Controller, useForm} from 'react-hook-form';
+import {AvatarField} from '~/components/forms/AvatarField';
 import {TextField} from '~/components/forms/TextField';
 import {Button} from '~/components/ui/Button';
 import {Dialog} from '~/components/ui/Dialog';
@@ -102,6 +103,26 @@ export function EditProfile() {
 								<Dialog.CloseTrigger />
 							</Dialog.Header>
 							<Dialog.Body className="space-y-3">
+								<Controller
+									control={form.control}
+									name="avatar"
+									render={(ctx) => (
+										<Field.Root invalid={ctx.fieldState.invalid}>
+											<Field.Label>Avatar</Field.Label>
+											<AvatarField
+												value={ctx.field.value}
+												onChange={(value) => {
+													ctx.field.onChange(value);
+													form.trigger('avatar');
+												}}
+												onError={(message) => {
+													form.setError('avatar', {message});
+												}}
+											/>
+											<Field.ErrorText>{ctx.fieldState.error?.message}</Field.ErrorText>
+										</Field.Root>
+									)}
+								/>
 								<Controller
 									control={form.control}
 									name="name"

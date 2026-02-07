@@ -28,6 +28,7 @@ export function Navbar() {
 				<Menu.Root>
 					<Menu.Trigger>
 						<Avatar.Root>
+							<Avatar.Image src={accountQuery.data?.avatar ?? undefined} />
 							<Avatar.Fallback />
 						</Avatar.Root>
 					</Menu.Trigger>
