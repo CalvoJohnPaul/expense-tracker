@@ -2,7 +2,7 @@ import type {HTMLArkProps} from '@ark-ui/react';
 import {ark} from '@ark-ui/react/factory';
 import {mergeProps} from '@ark-ui/react/utils';
 import {forwardRef, useMemo} from 'react';
-import {useBreadcrumbsContext} from './useBreadcrumbContext';
+import {useBreadcrumbsContext} from './useBreadcrumbsContext';
 
 export interface BreadcrumbsSeparatorProps extends HTMLArkProps<'li'> {}
 
@@ -16,4 +16,4 @@ export const Separator = forwardRef<HTMLLIElement, BreadcrumbsSeparatorProps>((p
 	return <ark.li ref={ref} {...mergedProps} />;
 });
 
-Separator.displayName = 'BreadcrumbSeparator';
+Separator.displayName = 'BreadcrumbsSeparator';

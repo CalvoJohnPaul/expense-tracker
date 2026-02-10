@@ -1,5 +1,5 @@
 import {createContext} from '@ark-ui/react/utils';
-import type {ItemProps, UseBreadcrumbsReturn} from './useBreadcrumb';
+import type {ItemProps, UseBreadcrumbsReturn} from './useBreadcrumbs';
 
 export interface UseBreadcrumbsContext extends UseBreadcrumbsReturn {}
 

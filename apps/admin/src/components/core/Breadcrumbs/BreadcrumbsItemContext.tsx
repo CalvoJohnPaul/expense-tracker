@@ -1,6 +1,6 @@
 import type {ReactNode} from 'react';
-import type {ItemProps} from './useBreadcrumb';
-import {useBreadcrumbsItemPropsContext} from './useBreadcrumbContext';
+import type {ItemProps} from './useBreadcrumbs';
+import {useBreadcrumbsItemPropsContext} from './useBreadcrumbsContext';
 
 export interface BreadcrumbsItemContextProps {
 	children: (context: ItemProps) => ReactNode;

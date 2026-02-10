@@ -59,16 +59,6 @@ export function useAdminActivityAggregateQuery(
 					params.append('account__nin', v.toString());
 				});
 
-			if (input?.createdAt?.gt) params.set('createdAt__gt', input.createdAt.gt.toString());
-			if (input?.createdAt?.gte) params.set('createdAt__gte', input.createdAt.gte.toString());
-			if (input?.createdAt?.lt) params.set('createdAt__lt', input.createdAt.lt.toString());
-			if (input?.createdAt?.lte) params.set('createdAt__lte', input.createdAt.lte.toString());
-
-			if (input?.updatedAt?.gt) params.set('updatedAt__gt', input.updatedAt.gt.toString());
-			if (input?.updatedAt?.gte) params.set('updatedAt__gte', input.updatedAt.gte.toString());
-			if (input?.updatedAt?.lt) params.set('updatedAt__lt', input.updatedAt.lt.toString());
-			if (input?.updatedAt?.lte) params.set('updatedAt__lte', input.updatedAt.lte.toString());
-
 			const res = await fetch(`${API_URL}/admin-activities/aggregate?${params.toString()}`, {
 				signal,
 				credentials: 'include',

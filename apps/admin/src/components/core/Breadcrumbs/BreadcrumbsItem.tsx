@@ -3,15 +3,15 @@ import {ark} from '@ark-ui/react/factory';
 import {mergeProps} from '@ark-ui/react/utils';
 import {forwardRef, useMemo} from 'react';
 import {splitProps} from '~/utils/splitProps';
-import {type ItemProps, useBreadcrumbs} from './useBreadcrumb';
-import {BreadcrumbsItemPropsProvider} from './useBreadcrumbContext';
+import type {ItemProps} from './useBreadcrumbs';
+import {BreadcrumbsItemPropsProvider, useBreadcrumbsContext} from './useBreadcrumbsContext';
 
 export interface BreadcrumbsItemProps extends Assign<HTMLArkProps<'li'>, ItemProps> {}
 
 export const Item = forwardRef<HTMLLIElement, BreadcrumbsItemProps>((props, ref) => {
 	const [itemProps, localProps] = useMemo(() => splitProps(props, 'currentPage'), [props]);
 
-	const breadcrumb = useBreadcrumbs();
+	const breadcrumb = useBreadcrumbsContext();
 
 	const mergedProps = useMemo(
 		() => mergeProps(breadcrumb.getItemProps(itemProps), localProps),
@@ -25,4 +25,4 @@ export const Item = forwardRef<HTMLLIElement, BreadcrumbsItemProps>((props, ref)
 	);
 });
 
-Item.displayName = 'BreadcrumbItem';
+Item.displayName = 'BreadcrumbsItem';

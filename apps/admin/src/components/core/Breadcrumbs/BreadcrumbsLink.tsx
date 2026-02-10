@@ -3,8 +3,8 @@ import {ark} from '@ark-ui/react/factory';
 import {mergeProps} from '@ark-ui/react/utils';
 import {forwardRef, useMemo} from 'react';
 import {splitProps} from '~/utils/splitProps';
-import type {LinkProps} from './useBreadcrumb';
-import {useBreadcrumbsContext, useBreadcrumbsItemPropsContext} from './useBreadcrumbContext';
+import type {LinkProps} from './useBreadcrumbs';
+import {useBreadcrumbsContext, useBreadcrumbsItemPropsContext} from './useBreadcrumbsContext';
 
 export interface BreadcrumbsLinkProps extends Assign<HTMLArkProps<'a'>, Pick<LinkProps, 'href'>> {}
 
@@ -30,4 +30,4 @@ export const Link = forwardRef<HTMLAnchorElement, BreadcrumbsLinkProps>((props, 
 	return <ark.a ref={ref} {...mergedProps} />;
 });
 
-Link.displayName = 'BreadcrumbLink';
+Link.displayName = 'BreadcrumbsLink';
