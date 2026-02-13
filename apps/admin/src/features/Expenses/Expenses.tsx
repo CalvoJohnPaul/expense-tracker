@@ -314,6 +314,18 @@ export const Expenses = protected_(
 							},
 						},
 						{
+							id: 'updatedAt',
+							heading: 'Updated date & time',
+							cell(data) {
+								return format(data.updatedAt, 'dd MMM yyyy hh:mm a');
+							},
+							hideable: true,
+							orderable: true,
+							className: {
+								cell: tw`w-56 tabular-nums`,
+							},
+						},
+						{
 							id: 'actions',
 							heading: <SettingsIcon className="size-5" />,
 							cell(data) {
