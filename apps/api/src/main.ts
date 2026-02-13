@@ -119,7 +119,7 @@ async function main() {
 		await server.register(static_, {
 			root: path.join(__dirname, 'uploads'),
 			index: false,
-			prefix: '/uploads',
+			prefix: '/_uploads',
 			maxAge: '90d',
 		});
 

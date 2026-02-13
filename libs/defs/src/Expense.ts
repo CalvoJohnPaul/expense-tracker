@@ -27,6 +27,14 @@ export const ExpenseDefinition = z.object({
 	description: z.string().trim().min(1, 'Description is required'),
 	transactionDate: DateDefinition,
 	location: z.string().nullable().optional(),
+	receipt: z
+		.object({
+			id: IdDefinition,
+			src: z.string(),
+			name: z.string(),
+		})
+		.nullable()
+		.optional(),
 	createdAt: DateDefinition,
 	updatedAt: DateDefinition,
 });
@@ -38,6 +46,8 @@ export const CreateExpenseInputDefinition = ExpenseDefinition.pick({
 	location: true,
 	description: true,
 	transactionDate: true,
+}).extend({
+	receipt: IdDefinition.nullable().optional(),
 });
 
 export type UpdateExpenseDataInput = z.infer<typeof UpdateExpenseDataInputDefinition>;
@@ -47,6 +57,7 @@ export const UpdateExpenseDataInputDefinition = z.object({
 	location: CreateExpenseInputDefinition.shape.location.optional().or(z.literal('')),
 	description: CreateExpenseInputDefinition.shape.description.optional().or(z.literal('')),
 	transactionDate: CreateExpenseInputDefinition.shape.transactionDate.optional(),
+	receipt: CreateExpenseInputDefinition.shape.receipt,
 });
 
 export type UpdateExpenseInput = z.infer<typeof UpdateExpenseInputDefinition>;

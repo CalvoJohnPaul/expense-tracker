@@ -11,7 +11,7 @@ import {
 	UpdateExpenseDataInputDefinition,
 	VoidSuccessfulHttpResponseDefinition,
 } from '@expense-tracker/defs';
-import {clamp} from 'es-toolkit';
+import {clamp, omit} from 'es-toolkit';
 import type {FastifyPluginAsyncZod} from 'fastify-type-provider-zod';
 import {uid} from 'uid';
 import XLSX from 'xlsx';
@@ -198,6 +198,13 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 						location: true,
 						description: true,
 						transactionDate: true,
+						receipt: {
+							select: {
+								id: true,
+								src: true,
+								name: true,
+							},
+						},
 						createdAt: true,
 						updatedAt: true,
 					},
@@ -474,7 +481,8 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 		async (req, reply) => {
 			const data = await app.prisma.expense.create({
 				data: {
-					...req.body,
+					...omit(req.body, ['receipt']),
+					receiptId: req.body.receipt ?? undefined,
 					accountId: req.account.id,
 				},
 				select: {
@@ -484,6 +492,13 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 					category: true,
 					description: true,
 					transactionDate: true,
+					receipt: {
+						select: {
+							id: true,
+							src: true,
+							name: true,
+						},
+					},
 					createdAt: true,
 					updatedAt: true,
 				},
@@ -529,7 +544,10 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 				where: {
 					id: req.params.id,
 				},
-				data: req.body,
+				data: {
+					...omit(req.body, ['receipt']),
+					receiptId: req.body.receipt ?? undefined,
+				},
 				select: {
 					id: true,
 					amount: true,
@@ -537,6 +555,13 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 					category: true,
 					description: true,
 					transactionDate: true,
+					receipt: {
+						select: {
+							id: true,
+							src: true,
+							name: true,
+						},
+					},
 					createdAt: true,
 					updatedAt: true,
 				},

@@ -11,6 +11,48 @@ import {pipeline} from 'node:stream/promises';
 import * as z from 'zod';
 
 const plugin: FastifyPluginAsyncZod = async (app) => {
+	app.get(
+		'/:id',
+		{
+			preHandler: [app.verifyAuth],
+			schema: {
+				tags: ['Upload'],
+				params: z.object({
+					id: z.coerce.number(),
+				}),
+				response: {
+					200: SuccessfulHttpResponseDefinition(UploadedFileDefinition),
+					400: FailedHttpResponseDefinition,
+					401: FailedHttpResponseDefinition,
+					403: FailedHttpResponseDefinition,
+					404: FailedHttpResponseDefinition,
+				},
+			},
+		},
+		async (req, reply) => {
+			const {id} = req.params;
+
+			const data = await app.prisma.uploadedFile.findUnique({
+				where: {id},
+				select: {
+					id: true,
+					src: true,
+					name: true,
+					size: true,
+					type: true,
+					createdAt: true,
+				},
+			});
+
+			if (data == null) return reply.notFound();
+
+			return reply.send({
+				ok: true,
+				data,
+			});
+		},
+	);
+
 	app.put(
 		'/',
 		{
@@ -41,7 +83,7 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 			const name = file.filename;
 			const type = file.mimetype;
 			const size = file.file.bytesRead;
-			const src = `/uploads/${uniqName}`;
+			const src = `/_uploads/${uniqName}`;
 
 			const data = await app.prisma.uploadedFile.create({
 				data: {

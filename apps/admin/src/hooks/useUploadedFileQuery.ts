@@ -1,12 +1,16 @@
-import {ExpenseDefinition, HttpResponseDefinition, type Expense} from '@expense-tracker/defs';
+import {
+	HttpResponseDefinition,
+	UploadedFileDefinition,
+	type UploadedFile,
+} from '@expense-tracker/defs';
 import {useQuery, type QueryKey, type UseQueryOptions} from '@tanstack/react-query';
 import {API_URL} from '~/constants';
 import {useCurrentAccountQuery} from './useCurrentAccountQuery';
 
-export function useExpenseQuery(
+export function useUploadedFileQuery(
 	id: number,
 	options?: Pick<
-		UseQueryOptions<Expense | null>,
+		UseQueryOptions<UploadedFile | null>,
 		| 'enabled'
 		| 'gcTime'
 		| 'staleTime'
@@ -28,12 +32,12 @@ export function useExpenseQuery(
 		enabled: query.data == null ? false : (options?.enabled ?? true),
 		queryKey: getQueryKey(id),
 		queryFn: async ({signal}) => {
-			const res = await fetch(`${API_URL}/expenses/${id}`, {
+			const res = await fetch(`${API_URL}/uploads/${id}`, {
 				signal,
 				credentials: 'include',
 			});
 
-			const obj = HttpResponseDefinition(ExpenseDefinition).parse(await res.json());
+			const obj = HttpResponseDefinition(UploadedFileDefinition).parse(await res.json());
 
 			if (obj.ok) return obj.data;
 
@@ -45,6 +49,6 @@ export function useExpenseQuery(
 	});
 }
 
-const getQueryKey = (id: number): QueryKey => ['Expense', id];
+const getQueryKey = (id: number): QueryKey => ['UploadedFile', id];
 
-useExpenseQuery.getQueryKey = getQueryKey;
+useUploadedFileQuery.getQueryKey = getQueryKey;

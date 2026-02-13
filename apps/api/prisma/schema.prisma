@@ -71,17 +71,20 @@ model Expense {
   amount          Float
   account         Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId       Int
+  receipt         UploadedFile?   @relation(fields: [receiptId], references: [id], onDelete: SetNull)
+  receiptId       Int?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 }
 
 model UploadedFile {
-  id        Int      @id @default(autoincrement())
-  src       String   @unique
+  id        Int       @id @default(autoincrement())
+  src       String    @unique
   type      String
   size      Float
   name      String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  expenses  Expense[]
 }
 
 model Otp {

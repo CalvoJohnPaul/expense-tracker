@@ -13,6 +13,7 @@ import {FeaturedIcon} from '~/components/ui/FeaturedIcon';
 import {Field} from '~/components/ui/Field';
 import {useDisclosure} from '~/hooks/useDisclosure';
 import {useExpenseContext} from './ExpensesContext';
+import {ReceiptField} from './ReceiptField';
 
 export function ViewExpense() {
 	const expense = useExpenseContext();
@@ -59,6 +60,16 @@ export function ViewExpense() {
 								/>
 							</Field.Root>
 							<Field.Root>
+								<Field.Label>Description</Field.Label>
+								<Field.Textarea
+									placeholder="Enter description"
+									autoresize
+									value={expense.description ?? ''}
+									onChange={noop}
+									readOnly
+								/>
+							</Field.Root>
+							<Field.Root>
 								<Field.Label>Location</Field.Label>
 								<TextField
 									value={expense.location ?? ''}
@@ -84,6 +95,10 @@ export function ViewExpense() {
 									readOnly
 									placeholder="Select transaction date"
 								/>
+							</Field.Root>
+							<Field.Root>
+								<Field.Label>Receipt</Field.Label>
+								<ReceiptField value={expense.receipt?.id} onChange={noop} readOnly />
 							</Field.Root>
 						</Dialog.Body>
 						<Dialog.Footer>

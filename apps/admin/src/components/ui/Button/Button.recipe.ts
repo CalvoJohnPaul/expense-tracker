@@ -23,6 +23,7 @@ export const buttonRecipe = tv({
 			primary: '',
 			danger: '',
 			warning: '',
+			gray: '',
 		},
 		variant: {
 			solid: '',
@@ -44,6 +45,11 @@ export const buttonRecipe = tv({
 			variant: 'solid',
 			accent: 'warning',
 			className: 'bg-amber-600 text-white',
+		},
+		{
+			variant: 'solid',
+			accent: 'gray',
+			className: 'bg-white text-neutral-900',
 		},
 		{
 			variant: 'outline',

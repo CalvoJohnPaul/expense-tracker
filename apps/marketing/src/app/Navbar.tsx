@@ -14,7 +14,7 @@ export function Navbar() {
 			<div className="flex gap-3">
 				<Button asChild variant="subtle">
 					<Link
-						href={`${process.env.NEXT_PUBLIC_ADMIN_URL}/login`}
+						href={`${process.env.NEXT_PUBLIC_ADMIN_URL}`}
 						rel="noreferrer noopener"
 						target="_blank"
 						prefetch={false}

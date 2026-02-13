@@ -6,7 +6,7 @@ import {
 	type ExpenseSortColumnInput,
 } from '@expense-tracker/defs';
 import {format} from 'date-fns';
-import {SettingsIcon} from 'lucide-react';
+import {CheckIcon, SettingsIcon} from 'lucide-react';
 import {
 	parseAsFloat,
 	parseAsInteger,
@@ -188,6 +188,15 @@ export const Expenses = protected_(
 							},
 						},
 						{
+							id: 'description',
+							heading: 'Description',
+							cell(data) {
+								return <span className="w-96 truncate">{data.description}</span>;
+							},
+							orderable: true,
+							hideable: true,
+						},
+						{
 							id: 'transactionDate',
 							heading: 'Transaction date',
 							cell(data) {
@@ -219,7 +228,7 @@ export const Expenses = protected_(
 							heading: 'Location',
 							cell(data) {
 								return (
-									<span title={data.location ?? ''} className="max-w-96 truncate">
+									<span title={data.location ?? ''} className="w-96 truncate">
 										{data.location}
 									</span>
 								);
@@ -264,6 +273,18 @@ export const Expenses = protected_(
 							className: {
 								cell: tw`w-48`,
 							},
+						},
+						{
+							id: 'receipt',
+							heading: 'Receipt',
+							cell(data) {
+								if (data.receipt != null) {
+									return <CheckIcon className="mx-auto size-4 text-emerald-300" />;
+								}
+							},
+							hideable: true,
+							orderable: true,
+							className: tw`w-0`,
 						},
 						{
 							id: 'createdAt',

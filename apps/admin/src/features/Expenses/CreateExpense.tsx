@@ -26,6 +26,7 @@ import {useDisclosure} from '~/hooks/useDisclosure';
 import {useExpenseAggregateQuery} from '~/hooks/useExpenseAggregateQuery';
 import {useExpenseQuery} from '~/hooks/useExpenseQuery';
 import {useExpensesQuery} from '~/hooks/useExpensesQuery';
+import {ReceiptField} from './ReceiptField';
 
 export function CreateExpense() {
 	const mutation = useCreateExpenseMutation();
@@ -39,6 +40,7 @@ export function CreateExpense() {
 			category: 'OTHERS',
 			description: '',
 			transactionDate: new Date(),
+			receipt: null,
 		},
 	});
 
@@ -53,6 +55,8 @@ export function CreateExpense() {
 		},
 		currentLocationQuery.data ? 0 : null,
 	);
+
+	console.log(form.formState.errors);
 
 	return (
 		<Dialog.Root
@@ -87,6 +91,7 @@ export function CreateExpense() {
 						<form
 							noValidate
 							onSubmit={form.handleSubmit(async (data) => {
+								console.log(data);
 								try {
 									const expense = await mutation.mutateAsync(data);
 
@@ -152,6 +157,15 @@ export function CreateExpense() {
 										</Field.Root>
 									)}
 								/>
+								<Field.Root invalid={!!form.formState.errors.description}>
+									<Field.Label>Description</Field.Label>
+									<Field.Textarea
+										placeholder="Enter description"
+										autoresize
+										{...form.register('description')}
+									/>
+									<Field.ErrorText>{form.formState.errors.description?.message}</Field.ErrorText>
+								</Field.Root>
 								<Controller
 									control={form.control}
 									name="location"
@@ -197,6 +211,17 @@ export function CreateExpense() {
 										</Field.Root>
 									)}
 								/>
+								<Controller
+									control={form.control}
+									name="receipt"
+									render={(ctx) => (
+										<Field.Root invalid={ctx.fieldState.invalid}>
+											<Field.Label>Receipt</Field.Label>
+											<ReceiptField value={ctx.field.value} onChange={ctx.field.onChange} />
+											<Field.ErrorText>{ctx.fieldState.error?.message}</Field.ErrorText>
+										</Field.Root>
+									)}
+								/>
 							</Dialog.Body>
 							<Dialog.Footer>
 								<Button
@@ -207,7 +232,9 @@ export function CreateExpense() {
 								>
 									Cancel
 								</Button>
-								<Button>Create</Button>
+								<Button type="submit" disabled={form.formState.isSubmitting}>
+									Create
+								</Button>
 							</Dialog.Footer>
 						</form>
 					</Dialog.Content>

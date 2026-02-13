@@ -24,6 +24,7 @@ import {useExpenseQuery} from '~/hooks/useExpenseQuery';
 import {useExpensesQuery} from '~/hooks/useExpensesQuery';
 import {useUpdateExpenseMutation} from '~/hooks/useUpdateExpenseMutation';
 import {useExpenseContext} from './ExpensesContext';
+import {ReceiptField} from './ReceiptField';
 
 export function EditExpense() {
 	const expense = useExpenseContext();
@@ -37,6 +38,7 @@ export function EditExpense() {
 					description: expense.description,
 					location: expense.location ?? '',
 					transactionDate: expense.transactionDate,
+					receipt: expense.receipt?.id ?? null,
 				});
 			}
 		},
@@ -50,6 +52,7 @@ export function EditExpense() {
 			category: 'OTHERS',
 			description: '',
 			transactionDate: new Date(),
+			receipt: null,
 		},
 	});
 
@@ -147,6 +150,15 @@ export function EditExpense() {
 										</Field.Root>
 									)}
 								/>
+								<Field.Root invalid={!!form.formState.errors.description}>
+									<Field.Label>Description</Field.Label>
+									<Field.Textarea
+										placeholder="Enter description"
+										autoresize
+										{...form.register('description')}
+									/>
+									<Field.ErrorText>{form.formState.errors.description?.message}</Field.ErrorText>
+								</Field.Root>
 								<Controller
 									control={form.control}
 									name="location"
@@ -192,6 +204,17 @@ export function EditExpense() {
 										</Field.Root>
 									)}
 								/>
+								<Controller
+									control={form.control}
+									name="receipt"
+									render={(ctx) => (
+										<Field.Root invalid={ctx.fieldState.invalid}>
+											<Field.Label>Receipt</Field.Label>
+											<ReceiptField value={ctx.field.value} onChange={ctx.field.onChange} />
+											<Field.ErrorText>{ctx.fieldState.error?.message}</Field.ErrorText>
+										</Field.Root>
+									)}
+								/>
 							</Dialog.Body>
 							<Dialog.Footer>
 								<Button
@@ -202,7 +225,9 @@ export function EditExpense() {
 								>
 									Cancel
 								</Button>
-								<Button>Update</Button>
+								<Button type="submit" disabled={form.formState.isSubmitting}>
+									Update
+								</Button>
 							</Dialog.Footer>
 						</form>
 					</Dialog.Content>
