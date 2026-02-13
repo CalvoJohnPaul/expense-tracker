@@ -99,7 +99,7 @@ export function ReceiptField(props: ReceiptFieldProps) {
 			{!query.isLoading && query.data == null && (
 				<div className="px-4 py-6">
 					<h2 className="mt-3 text-center font-semibold text-neutral-100">Choose file</h2>
-					<p className="text-center text-neutral-400">Upload image or scan a receipt</p>
+					<p className="text-center text-neutral-400">Upload image of your receipt</p>
 
 					<Button
 						variant="outline"
