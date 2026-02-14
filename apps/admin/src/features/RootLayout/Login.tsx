@@ -9,6 +9,7 @@ import {queryClient} from '~/config/queryClient';
 import {toaster} from '~/config/toaster';
 import {useCreateSessionMutation} from '~/hooks/useCreateSessionMutation';
 import {useCurrentAccountQuery} from '~/hooks/useCurrentAccountQuery';
+import {ForgotPassword} from './ForgotPassword';
 
 export function Login() {
 	const mutation = useCreateSessionMutation();
@@ -58,7 +59,10 @@ export function Login() {
 				name="password"
 				render={(ctx) => (
 					<Field.Root className="mt-4" invalid={ctx.fieldState.invalid}>
-						<Field.Label>Password</Field.Label>
+						<div className="mb-1.5 flex items-center">
+							<Field.Label className="mb-0 grow">Password</Field.Label>
+							<ForgotPassword />
+						</div>
 						<PasswordField
 							placeholder="Enter password"
 							value={ctx.field.value}

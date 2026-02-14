@@ -97,7 +97,7 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 
 			req.session.set('account', data.id);
 
-			return reply.send({
+			return reply.code(201).send({
 				ok: true,
 				data,
 			});
@@ -245,10 +245,69 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 				}),
 			},
 		},
-		async (_req, reply) => {
-			return reply.send({
-				ok: true,
+		async (req, reply) => {
+			const now = new Date();
+			const code = req.body.otpCode;
+
+			const otp = await app.prisma.otp.findUnique({
+				where: {
+					code,
+				},
+				select: {
+					email: true,
+					expiresAt: true,
+					createdAt: true,
+				},
 			});
+
+			if (!otp) return reply.badRequest('Invalid OTP code');
+
+			if (otp.expiresAt.getTime() <= now.getTime()) {
+				await app.prisma.otp.delete({
+					where: {
+						code,
+					},
+				});
+
+				return reply.badRequest('OTP code has expired');
+			}
+
+			const account = await app.prisma.account.findUnique({
+				where: {
+					email: otp.email,
+				},
+				select: {
+					id: true,
+				},
+			});
+
+			if (!account) {
+				await app.prisma.otp.delete({
+					where: {
+						code,
+					},
+				});
+
+				return reply.badRequest('Account not found');
+			}
+
+			await app.prisma.$transaction([
+				app.prisma.account.update({
+					where: {
+						id: account.id,
+					},
+					data: {
+						password: await hash(req.body.newPassword, 8),
+					},
+				}),
+				app.prisma.otp.delete({
+					where: {
+						code,
+					},
+				}),
+			]);
+
+			return reply.send({ok: true});
 		},
 	);
 };

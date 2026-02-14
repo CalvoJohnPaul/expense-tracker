@@ -4,10 +4,18 @@ import {Button} from '~/components/ui/Button';
 export function Navbar() {
 	return (
 		<header className="flex h-18 items-center border-b px-4 py-3 lg:px-8">
-			<svg viewBox="0 0 53 44" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto">
+			<svg
+				width="50"
+				height="39"
+				viewBox="0 0 50 39"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				className="h-10 w-auto"
+			>
+				<path d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z" className="fill-blue-400" />
 				<path
-					d="M23.2997 0L52.0461 28.6301V44H38.6311V34.1553L17.7522 13.3607L13.415 13.3607L13.415 44H0L0 0L23.2997 0ZM38.6311 15.2694V0L52.0461 0V15.2694L38.6311 15.2694Z"
-					fill="currentColor"
+					d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z"
+					className="fill-blue-700"
 				/>
 			</svg>
 			<div className="grow" />

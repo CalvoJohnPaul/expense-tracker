@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import * as p from '@clack/prompts';
 import {faker} from '@faker-js/faker';
 import {hash} from 'bcrypt';

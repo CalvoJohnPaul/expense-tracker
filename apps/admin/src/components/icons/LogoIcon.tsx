@@ -3,7 +3,6 @@ import type {ComponentPropsWithRef} from 'react';
 export function LogoIcon(props: ComponentPropsWithRef<'svg'>) {
 	return (
 		<svg
-			id="logo-35"
 			width="50"
 			height="39"
 			viewBox="0 0 50 39"

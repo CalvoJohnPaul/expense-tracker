@@ -4,14 +4,13 @@ import {DateDefinition, IdDefinition} from './common.js';
 export type Otp = z.infer<typeof OtpDefinition>;
 export const OtpDefinition = z.object({
 	id: IdDefinition,
-	code: z.string().regex(/[0-9]{6}/),
+	code: z.string(),
 	email: z.email(),
 	expiresAt: DateDefinition,
 	createdAt: DateDefinition,
 });
 
-export type GenerateOtp = z.infer<typeof OtpDefinition>;
-export const GenerateOtpDefinition = z.object({
-	ttl: z.number(),
+export type GenerateOtpInput = z.infer<typeof GenerateOtpInputDefinition>;
+export const GenerateOtpInputDefinition = z.object({
 	email: z.email(),
 });

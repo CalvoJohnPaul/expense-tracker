@@ -525,7 +525,7 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 				},
 			});
 
-			return reply.send({
+			return reply.code(201).send({
 				ok: true,
 				data,
 			});

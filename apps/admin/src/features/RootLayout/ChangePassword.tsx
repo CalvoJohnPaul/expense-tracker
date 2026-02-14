@@ -91,9 +91,7 @@ export function ChangePassword() {
 								</FeaturedIcon.Root>
 								<div>
 									<Dialog.Title>Change password</Dialog.Title>
-									<Dialog.Description>
-										Fill out the form to with your new password
-									</Dialog.Description>
+									<Dialog.Description>Fill out the form to change your password</Dialog.Description>
 								</div>
 								<Dialog.CloseTrigger />
 							</Dialog.Header>

@@ -68,9 +68,8 @@ export const ChangePasswordInputDefinition = z.object({
 
 export type ResetPasswordInput = z.infer<typeof ResetPasswordInputDefinition>;
 export const ResetPasswordInputDefinition = z.object({
-	oldPassword: PasswordDefinition,
 	newPassword: PasswordDefinition,
-	otpCode: z.string().regex(/[0-9]{6}/),
+	otpCode: z.string().regex(/[0-9A-Z]{6}/, 'Invalid OTP code'),
 });
 
 export type AccountAggregate = z.infer<typeof AccountAggregateDefinition>;

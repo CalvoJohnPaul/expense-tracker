@@ -1,11 +1,16 @@
 import {
 	FailedHttpResponseDefinition,
-	GenerateOtpDefinition,
+	GenerateOtpInputDefinition,
 	VoidSuccessfulHttpResponseDefinition,
 } from '@expense-tracker/defs';
 import type {FastifyPluginAsyncZod} from 'fastify-type-provider-zod';
+import fs from 'node:fs';
+import path from 'node:path';
 import {uid} from 'uid';
 import * as z from 'zod';
+import {mailto} from '../helpers/mailto';
+
+const template = fs.readFileSync(path.resolve(__dirname, '../templates/emails/otp.html'), 'utf-8');
 
 const plugin: FastifyPluginAsyncZod = async (app) => {
 	app.post(
@@ -13,10 +18,12 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 		{
 			schema: {
 				tags: ['Otp'],
-				body: GenerateOtpDefinition,
+				body: GenerateOtpInputDefinition,
 				response: {
-					201: VoidSuccessfulHttpResponseDefinition,
 					400: FailedHttpResponseDefinition,
+					401: FailedHttpResponseDefinition,
+					500: FailedHttpResponseDefinition,
+					201: VoidSuccessfulHttpResponseDefinition,
 				},
 				headers: z.object({
 					'x-csrf-token': z.string().nullable().optional(),
@@ -24,46 +31,74 @@ const plugin: FastifyPluginAsyncZod = async (app) => {
 			},
 		},
 		async (req, reply) => {
-			const {email, ttl} = req.body;
+			const {email} = req.body;
 
-			const fiveMinutesAgo = new Date();
-			fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+			const registered = await app.prisma.account.exists({email});
+
+			if (!registered) return reply.unauthorized();
+
+			const oneMinuteAgo = new Date();
+			oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
 
 			const coolingDown = await app.prisma.otp.exists({
 				email,
 				createdAt: {
-					gte: fiveMinutesAgo,
+					gte: oneMinuteAgo,
 					lte: new Date(),
 				},
 			});
 
 			if (coolingDown) return reply.badRequest();
 
-			const code = uid(6);
+			const code = uid(6).toUpperCase();
 			const expiresAt = new Date();
-			expiresAt.setSeconds(expiresAt.getSeconds() + ttl);
+			expiresAt.setMinutes(expiresAt.getMinutes() + 10);
 
-			await app.prisma.otp.upsert({
-				where: {
-					email,
-				},
-				create: {
-					code,
-					email,
-					expiresAt,
-				},
-				update: {
-					code,
-					expiresAt,
-				},
-				select: {
-					id: true,
-				},
-			});
+			try {
+				await app.prisma.otp.upsert({
+					where: {
+						email,
+					},
+					create: {
+						code,
+						email,
+						expiresAt,
+					},
+					update: {
+						code,
+						expiresAt,
+					},
+					select: {
+						id: true,
+					},
+				});
 
-			return reply.send({
-				ok: true,
-			});
+				const sent = await mailto({
+					recipient: email,
+					subject: 'Expense Tracker OTP',
+					html: template
+						.replace('{{OTP_CODE}}', code)
+						.replace('{{CURRENT_YEAR}}', new Date().getFullYear().toString()),
+				});
+
+				if (!sent) {
+					await app.prisma.otp
+						.delete({
+							where: {
+								email,
+							},
+						})
+						.catch((error) => {
+							app.log.error({error, email}, 'Failed to delete OTP after mail failure');
+						});
+
+					return reply.internalServerError();
+				}
+			} catch {
+				return reply.internalServerError();
+			}
+
+			return reply.code(201).send({ok: true});
 		},
 	);
 };

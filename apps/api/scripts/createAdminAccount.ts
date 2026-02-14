@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import * as p from '@clack/prompts';
 import {genSalt, hash} from 'bcrypt';
 import * as z from 'zod';
@@ -45,11 +47,18 @@ async function createAdminAccount() {
 	const spinner = p.spinner();
 
 	spinner.start('Checking email availability');
+	try {
+		p.log.info(email);
 
-	const exists = await prisma.account.count({where: {email}});
+		const exists = await prisma.account.exists({email});
 
-	if (exists) {
-		spinner.stop('Email is no longer available');
+		if (exists) {
+			spinner.stop('Email is no longer available');
+			p.cancel('Process cancelled');
+			process.exit(0);
+		}
+	} catch (error) {
+		p.log.error(error instanceof Error ? error.message : 'Something went wrong.');
 		p.cancel('Process cancelled');
 		process.exit(0);
 	}
